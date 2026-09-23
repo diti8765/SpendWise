@@ -13,6 +13,7 @@ import 'widgets/spending_donut_chart.dart';
 import 'widgets/daily_trend_chart.dart';
 import 'widgets/budget_summary_card.dart';
 import 'widgets/recent_transactions_list.dart';
+import '../../transactions/presentation/widgets/add_expense_sheet.dart';
 
 /// Main dashboard showing monthly spending overview.
 class OverviewScreen extends ConsumerWidget {
@@ -29,6 +30,17 @@ class OverviewScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('SpendWise'),
         actions: [
+          IconButton(
+            tooltip: 'Add Expense',
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              showModalBottomSheet<bool>(
+                context: context,
+                isScrollControlled: true,
+                builder: (_) => const AddExpenseSheet(),
+              );
+            },
+          ),
           IconButton(
             tooltip: 'Log out',
             icon: const Icon(Icons.logout),
@@ -148,6 +160,18 @@ class OverviewScreen extends ConsumerWidget {
             const RecentTransactionsList(),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        heroTag: 'overview_add_expense_fab',
+        icon: const Icon(Icons.add),
+        label: const Text('Add Expense'),
+        onPressed: () {
+          showModalBottomSheet<bool>(
+            context: context,
+            isScrollControlled: true,
+            builder: (_) => const AddExpenseSheet(),
+          );
+        },
       ),
     );
   }

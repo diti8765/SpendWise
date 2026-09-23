@@ -13,6 +13,7 @@ import '../../filters/presentation/filter_sheet.dart';
 import '../../overview/state/overview_providers.dart';
 import 'widgets/transaction_tile.dart';
 import 'widgets/day_header.dart';
+import 'widgets/add_expense_sheet.dart';
 
 /// Categorised transaction feed with search, filters, and pagination.
 class FeedScreen extends ConsumerStatefulWidget {
@@ -90,6 +91,21 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
     });
   }
 
+  Future<void> _openAddExpense() async {
+    final added = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => AddExpenseSheet(
+        onExpenseAdded: () {
+          _refresh();
+        },
+      ),
+    );
+    if (added == true) {
+      _refresh();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final month = ref.watch(monthProvider);
@@ -102,6 +118,11 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
       appBar: AppBar(
         title: const Text('Transactions'),
         actions: [
+          IconButton(
+            tooltip: 'Add Expense',
+            icon: const Icon(Icons.add),
+            onPressed: _openAddExpense,
+          ),
           IconButton(
             tooltip: 'Filters',
             icon: Badge(
@@ -190,6 +211,12 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        heroTag: 'feed_add_expense_fab',
+        icon: const Icon(Icons.add),
+        label: const Text('Add Expense'),
+        onPressed: _openAddExpense,
       ),
     );
   }

@@ -99,6 +99,24 @@ class TransactionRepository {
     }
   }
 
+  /// Adds a new transaction / expense.
+  Future<Transaction> addTransaction(Transaction transaction) async {
+    if (_useMock) {
+      _mockTransactions.insert(0, transaction);
+      return transaction;
+    }
+
+    try {
+      final response = await _dio.post(
+        '/transactions',
+        data: transaction.toJson(),
+      );
+      return Transaction.fromJson(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      throw _errorMapper.mapDioException(e);
+    }
+  }
+
   /// Changes the category of a transaction.
   /// If [applyToMerchant] is true, creates a merchant rule.
   Future<Transaction> recategorise({

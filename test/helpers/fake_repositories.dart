@@ -26,6 +26,11 @@ class FakeTransactionRepository implements TransactionRepository {
   }
 
   @override
+  Future<Transaction> addTransaction(Transaction transaction) async {
+    return transaction;
+  }
+
+  @override
   Future<Transaction> recategorise({
     required String transactionId,
     required String newCategoryId,

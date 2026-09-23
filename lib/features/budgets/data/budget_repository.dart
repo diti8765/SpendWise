@@ -76,6 +76,41 @@ class BudgetRepository {
     }
   }
 
+  /// Records an expense against a budget in the given month, updating spentPaise.
+  Future<Budget?> recordExpense({
+    required String category,
+    required String month,
+    required int amountPaise,
+  }) async {
+    if (_useMock) {
+      final index = _mockBudgets.indexWhere(
+        (b) => b.category == category && b.month == month,
+      );
+      if (index >= 0) {
+        final current = _mockBudgets[index];
+        final updated = current.copyWith(
+          spentPaise: current.spentPaise + amountPaise,
+        );
+        _mockBudgets[index] = updated;
+        return updated;
+      }
+      return null;
+    }
+
+    try {
+      final budgets = await getBudgets(month);
+      for (final b in budgets) {
+        if (b.category == category) {
+          final updated = b.copyWith(spentPaise: b.spentPaise + amountPaise);
+          return await setBudget(updated);
+        }
+      }
+      return null;
+    } on DioException catch (e) {
+      throw _errorMapper.mapDioException(e);
+    }
+  }
+
   // ─── Mock implementation ──────────────────────────────────────
 
   static final List<Budget> _mockBudgets = _generateMockBudgets();
