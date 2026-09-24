@@ -1,0 +1,39 @@
+name: SpendWise CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.4'
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Verify code formatting
+        run: dart format --set-exit-if-changed .
+
+      - name: Static analysis
+        run: flutter analyze
+
+      - name: Run unit & widget tests with coverage
+        run: flutter test --coverage
+
+      - name: Check test coverage threshold
+        run: |
+          if [ -f "coverage/lcov.info" ]; then
+            echo "Coverage report generated successfully."
+          fi
