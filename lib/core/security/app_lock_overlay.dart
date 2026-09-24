@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/routes.dart';
+import '../widgets/spendwise_logo.dart';
 import '../../features/auth/state/auth_provider.dart';
 import 'app_lock.dart';
 import 'biometric_service.dart';
@@ -62,16 +63,18 @@ class _AppLockOverlayState extends ConsumerState<AppLockOverlay> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  const SpendWiseLogo(size: 64),
+                  const SizedBox(height: 24),
                   Container(
-                    width: 80,
-                    height: 80,
+                    width: 72,
+                    height: 72,
                     decoration: BoxDecoration(
                       color: theme.colorScheme.primaryContainer,
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
                       Icons.lock_outline,
-                      size: 40,
+                      size: 36,
                       color: theme.colorScheme.onPrimaryContainer,
                     ),
                   ),

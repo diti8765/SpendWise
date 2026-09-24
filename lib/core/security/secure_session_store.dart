@@ -40,6 +40,29 @@ class SecureSessionStore {
     return _storage.read(key: _userIdKey);
   }
 
+  static const _userNameKey = 'user_name';
+  static const _customerIdKey = 'customer_id';
+
+  /// Saves the user display name for session restoration.
+  Future<void> saveUserName(String name) async {
+    await _storage.write(key: _userNameKey, value: name);
+  }
+
+  /// Retrieves the stored user display name.
+  Future<String?> getUserName() async {
+    return _storage.read(key: _userNameKey);
+  }
+
+  /// Saves the customer ID for session restoration.
+  Future<void> saveCustomerId(String customerId) async {
+    await _storage.write(key: _customerIdKey, value: customerId);
+  }
+
+  /// Retrieves the stored customer ID.
+  Future<String?> getCustomerId() async {
+    return _storage.read(key: _customerIdKey);
+  }
+
   /// Clears all session data (used on logout).
   Future<void> clearSession() async {
     await _storage.deleteAll();

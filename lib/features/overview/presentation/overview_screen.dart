@@ -7,6 +7,7 @@ import '../../../core/utils/money.dart';
 import '../../../core/utils/date_format.dart';
 import '../../../core/widgets/async_error_view.dart';
 import '../../../core/widgets/skeleton.dart';
+import '../../../core/widgets/spendwise_logo.dart';
 import '../state/overview_providers.dart';
 import '../../../features/auth/state/auth_provider.dart';
 import 'widgets/spending_donut_chart.dart';
@@ -24,11 +25,26 @@ class OverviewScreen extends ConsumerWidget {
     final month = ref.watch(monthProvider);
     final summaryAsync = ref.watch(currentSummaryProvider);
     final prevSummaryAsync = ref.watch(previousSummaryProvider);
+    final authState = ref.watch(authStateProvider);
+    final userSession = authState.valueOrNull;
+    final userName = userSession?.name ?? userSession?.customerId ?? 'User';
     final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('SpendWise'),
+        titleSpacing: 16,
+        title: Row(
+          children: [
+            const SpendWiseLogo(size: 32),
+            const SizedBox(width: 10),
+            Text(
+              'SpendWise',
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
         actions: [
           IconButton(
             tooltip: 'Add Expense',
@@ -61,6 +77,49 @@ class OverviewScreen extends ConsumerWidget {
         child: ListView(
           padding: const EdgeInsets.only(bottom: 24),
           children: [
+            // Top User Greeting Heading
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 24,
+                    backgroundColor: theme.colorScheme.primaryContainer,
+                    child: Text(
+                      userName.isNotEmpty ? userName[0].toUpperCase() : 'U',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.onPrimaryContainer,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Hi, $userName 👋',
+                          style: theme.textTheme.headlineSmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: -0.3,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          'Welcome back to your financial overview',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
             // Month switcher
             _MonthSwitcher(month: month, ref: ref),
 

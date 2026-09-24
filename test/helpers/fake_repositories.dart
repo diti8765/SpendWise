@@ -49,6 +49,8 @@ class FakeTransactionRepository implements TransactionRepository {
 class FakeSecureSessionStore implements SecureSessionStore {
   String? _token;
   String? _userId;
+  String? _userName;
+  String? _customerId;
 
   @override
   Future<void> saveToken(String token) async => _token = token;
@@ -63,9 +65,24 @@ class FakeSecureSessionStore implements SecureSessionStore {
   Future<String?> getUserId() async => _userId;
 
   @override
+  Future<void> saveUserName(String name) async => _userName = name;
+
+  @override
+  Future<String?> getUserName() async => _userName;
+
+  @override
+  Future<void> saveCustomerId(String customerId) async =>
+      _customerId = customerId;
+
+  @override
+  Future<String?> getCustomerId() async => _customerId;
+
+  @override
   Future<void> clearSession() async {
     _token = null;
     _userId = null;
+    _userName = null;
+    _customerId = null;
   }
 
   @override

@@ -27,7 +27,7 @@ void main() {
 
     expect(find.text('SpendWise'), findsOneWidget);
     expect(find.text('Sign In'), findsOneWidget);
-    expect(find.text('Customer ID'), findsOneWidget);
+    expect(find.text('Customer ID / Username'), findsOneWidget);
     expect(find.text('PIN'), findsOneWidget);
   });
 }

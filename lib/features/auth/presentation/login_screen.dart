@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/routes.dart';
 import '../../../core/utils/validators.dart';
+import '../../../core/widgets/spendwise_logo.dart';
 import '../domain/auth_models.dart';
 import '../state/auth_provider.dart';
 
@@ -64,36 +65,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Logo/icon
-                  Icon(
-                    Icons.account_balance_wallet,
-                    size: 64,
-                    color: theme.colorScheme.primary,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'SpendWise',
-                    style: theme.textTheme.headlineLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: theme.colorScheme.primary,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Expense Analytics & Monthly Budgets',
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                    textAlign: TextAlign.center,
+                  // SpendWise Logo
+                  const SpendWiseLogo(
+                    size: 80,
+                    showText: true,
+                    subtitle: 'Expense Analytics & Monthly Budgets',
                   ),
                   const SizedBox(height: 48),
 
-                  // Customer ID
+                  // Customer ID / Username
                   TextFormField(
                     controller: _customerIdController,
                     decoration: const InputDecoration(
-                      labelText: 'Customer ID',
+                      labelText: 'Customer ID / Username',
+                      hintText: 'e.g. ANANYA or your name',
                       prefixIcon: Icon(Icons.person_outline),
                     ),
                     validator: Validators.customerId,

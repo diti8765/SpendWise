@@ -59,14 +59,16 @@ class AuthRepository {
   Future<UserSession?> restoreSession() async {
     final token = await _sessionStore.getToken();
     final userId = await _sessionStore.getUserId();
+    final userName = await _sessionStore.getUserName();
+    final customerId = await _sessionStore.getCustomerId();
 
     if (token == null || userId == null) return null;
 
     if (_useMock) {
       return UserSession(
         userId: userId,
-        customerId: 'CUST001',
-        name: 'Ananya Sharma',
+        customerId: customerId ?? 'CUST001',
+        name: userName ?? 'Ananya Sharma',
         token: token,
       );
     }
@@ -103,15 +105,37 @@ class AuthRepository {
       throw const UnauthorizedError(message: 'Invalid customer ID or PIN.');
     }
 
+    final inputName = request.customerId.trim();
+    final String formattedName;
+    if (inputName.toLowerCase() == 'ananya') {
+      formattedName = 'Ananya Sharma';
+    } else if (inputName.toLowerCase() == 'deepak') {
+      formattedName = 'Deepak Verma';
+    } else if (inputName.toLowerCase() == 'sara') {
+      formattedName = 'Sara Khan';
+    } else if (inputName.isNotEmpty) {
+      formattedName = inputName
+          .split(' ')
+          .map((word) {
+            if (word.isEmpty) return word;
+            return word[0].toUpperCase() + word.substring(1);
+          })
+          .join(' ');
+    } else {
+      formattedName = 'User';
+    }
+
     final session = UserSession(
       userId: 'user_${request.customerId}',
       customerId: request.customerId,
-      name: 'Ananya Sharma',
+      name: formattedName,
       token: 'mock_token_${DateTime.now().millisecondsSinceEpoch}',
     );
 
     await _sessionStore.saveToken(session.token);
     await _sessionStore.saveUserId(session.userId);
+    await _sessionStore.saveUserName(session.name);
+    await _sessionStore.saveCustomerId(session.customerId);
     return session;
   }
 }
